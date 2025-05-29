@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  # 🟦 Your Node.js App
+  app:
+    build: .                    # 🔧 Build the image from Dockerfile in the current directory
+    ports:
+      - '5000:5000'             # 🔁 Map container port 5000 to local machine's port 5000
+    env_file:
+      - .env
+    environment:
+      - MONGO_URI=${MONGO_URI}  # 🌐 Tell Node.js to connect to MongoDB service
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY} # ignore
+      - REDIS_CLIENT_URL=${REDIS_CLIENT_URL}                 # ignore
