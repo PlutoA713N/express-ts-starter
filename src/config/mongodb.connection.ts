@@ -6,6 +6,10 @@ import {retryAsync} from "../utils/retryAsync";
 
 const { mongoUri, retryDelay, retryCount } = mongoDBConfig;
 
+if(!mongoUri){
+    throw new AppError("MongoDB URI not found", 500, "DB_URI_NOT_FOUND");
+}
+
 const connectDB = async (): Promise<void> => {
     try {
         await connect(mongoUri);
