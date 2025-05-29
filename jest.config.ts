@@ -7,8 +7,14 @@ module.exports = {
         "^.+\.tsx?$": ["ts-jest",{}],
     },
     collectCoverage: true,
-    collectCoverageFrom: ['src/controllers/**/*.ts'],
-    coverageReporters: ["text", "lcov"],
+    collectCoverageFrom: [
+        'src/models/**/*.ts', // this is the only file that needs to be tested
+        // add the folders or files that need to be tested or uncommet the line below
+        // 'src/**/*.ts', // all ts files in src
+        // '!src/**/*.test.ts', // exclude test files
+        // '!src/index.ts', // optionally exclude entry points
+    ],
+    // coverageReporters: ["text", "lcov"], // use it if you want to see the coverage report in the files
     coverageThreshold: {
         global: {
             statements: 80,
