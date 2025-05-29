@@ -16,7 +16,7 @@ export async function main() {
         server = app.listen(PORT, () => {
             logger.info(`Server is running on port ${PORT}`)
         })
-    }catch(e){
+    }catch(e: any){
         logger.error(`Error in starting the main(): ${e.message}`)
         await closeDB()
         process.exit(1)
