@@ -10,7 +10,6 @@ export const apiLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     handler: (req: Request, res: Response) => {
-        const requestId = (req.headers['x-request-id'] as string) || uuidv4();
 
         const error = createApiError({
             status: 429,
@@ -18,13 +17,12 @@ export const apiLimiter = rateLimit({
             title: 'Too Many Requests',
             detail: 'Too many requests, please try again later.',
             instance: req.originalUrl,
-            requestId,
         });
 
         logger.warn(`[RateLimit] ${req.ip} exceeded limit on ${req.originalUrl}`, {
             ip: req.ip,
             path: req.originalUrl,
-            requestId,
+            requestId: req.headers['x-request-id'] as string,
             userAgent: req.headers['user-agent'],
         });
 
@@ -39,7 +37,6 @@ export const loginRateLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     handler: (req: Request, res: Response) => {
-        const requestId = (req.headers['x-request-id'] as string) || uuidv4();
 
         const error = createApiError({
             status: 429,
@@ -47,13 +44,12 @@ export const loginRateLimiter = rateLimit({
             title: 'Too Many Login Attempts',
             detail: 'You’ve exceeded the number of login attempts. Please wait before retrying.',
             instance: req.originalUrl,
-            requestId,
         });
 
         logger.warn(`[LoginRateLimit] ${req.ip} blocked from logging in`, {
             ip: req.ip,
             path: req.originalUrl,
-            requestId,
+            requestId: req.headers['x-request-id'] as string,
             userAgent: req.headers['user-agent'],
         });
 
