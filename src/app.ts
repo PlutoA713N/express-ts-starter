@@ -12,10 +12,10 @@ import {notFoundMiddleware} from "./middleware/express_middleware/not.found.midd
 
 export const app = express();
 
-app.use(apiLimiter)
+app.use(requestIdMiddleware)
 app.use(helmet(helmetOptions))
 app.use(cors());
-app.use(requestIdMiddleware)
+app.use(apiLimiter)
 app.use(httpLogger)
 
 app.use(express.json());
