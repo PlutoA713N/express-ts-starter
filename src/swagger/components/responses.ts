@@ -3,7 +3,7 @@ export const responses = {
         description: 'Resource not found',
         content: {
             'application/json': {
-                schema: { $ref: '#/components/schemas/ApiError' },
+                schema: { $ref: '#/schemas/ApiError' },
             },
         },
     },
@@ -11,7 +11,7 @@ export const responses = {
         description: 'Unexpected server error',
         content: {
             'application/json': {
-                schema: { $ref: '#/components/schemas/ApiError' },
+                schema: { $ref: '#/schemas/ApiError' },
             },
         },
     },
@@ -19,7 +19,7 @@ export const responses = {
         description: 'Client has sent too many requests in a given amount of time.',
         content: {
             'application/json': {
-                schema: { $ref: '#/components/schemas/TooManyRequestsError' },
+                schema: { $ref: '#/schemas/TooManyRequestsError' },
             },
         },
     },
