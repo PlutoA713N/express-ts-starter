@@ -11,7 +11,7 @@ export const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'http://localhost:5000/api/v1',
+            url: 'http://localhost:5000/',
             description: 'Development server',
         },
     ],
@@ -25,5 +25,5 @@ export const swaggerDefinition = {
 
 export const swaggerOptions = {
     swaggerDefinition,
-    apis: ['./routes/**/*.ts'],
+    apis: ['./src/routes/*.ts', './src/controllers/*.ts'], // <-- Adjust to your project
 };
