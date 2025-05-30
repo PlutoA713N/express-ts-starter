@@ -81,6 +81,34 @@ The following scripts are available to help with development and deployment:
 }
 ```
 
+## Swagger API Documentation
+
+This API includes Swagger-based documentation to help you explore and interact with the available endpoints.
+
+### Access Swagger UI:
+
+Once the app is running, open your browser and go to:
+
+```
+http://localhost:5000/api-docs
+```
+
+This will show the Swagger UI, where you can view and interact with the API documentation.
+
+### Example Endpoint: MongoDB Healthcheck
+
+**GET /mongodb**  
+Checks the connection to MongoDB and returns the connection status.
+
+#### Responses:
+- **200 OK**
+   - Message: "MongoDB connected"
+- **500 Internal Server Error**
+   - Message: "Database Error"
+- **429 Too Many Requests**
+   - Message: "Too Many Requests"
+
+
 
 ## Contributing
 
