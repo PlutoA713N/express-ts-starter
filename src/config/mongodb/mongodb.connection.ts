@@ -1,8 +1,8 @@
 import {mongoDBConfig} from "./index";
 import { connect, connection } from "mongoose";
-import { AppError } from "../class/app.error.class";
-import logger from "../logger";
-import {retryAsync} from "../utils/retryAsync";
+import { AppError } from "../../class/app.error.class";
+import logger from "../../logger";
+import {retryAsync} from "../../utils/retryAsync";
 
 const { mongoUri, retryDelay, retryCount } = mongoDBConfig;
 
