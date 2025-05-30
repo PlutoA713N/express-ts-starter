@@ -1,12 +1,12 @@
 // src/tests/mongoHealthcheck.test.ts
 import { Request, Response, NextFunction } from 'express';
 import { mongoHealthcheck } from '../../models/mongo_operations/index';
-import * as mongodb from '../../config/mongodb.connection';
+import * as mongodb from '../../config/mongodb/mongodb.connection';
 import logger from '../../logger';
 import { createSuccessResponse } from '../../factory/create.sucess.response';
 import { createApiError } from '../../factory/create.api.error';
 
-jest.mock('../../config/mongodb.connection');
+jest.mock('../../config/mongodb/mongodb.connection');
 jest.mock('../../logger');
 jest.mock('../../factory/create.sucess.response');
 jest.mock('../../factory/create.api.error');

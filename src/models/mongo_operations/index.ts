@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import {pingDB} from "../../config/mongodb.connection";
+import {pingDB} from "../../config/mongodb/mongodb.connection";
 import logger from "../../logger";
 import {createSuccessResponse} from "../../factory/create.sucess.response";
 import {createApiError} from "../../factory/create.api.error";
