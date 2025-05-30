@@ -53,7 +53,7 @@ const closeDB = async (): Promise<void> => {
     }
 };
 
-const run = async (): Promise<void> => {
+const runMongo = async (): Promise<void> => {
     try {
         await retryAsync(connectDB,
             {
@@ -75,11 +75,11 @@ const run = async (): Promise<void> => {
     } catch (err) {
         logger.error("Failed to ping MongoDB: %o", err);
         throw new AppError(
-            `MongoDB ping failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+            `MongoDB connection failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
             500,
-            'DB_PING_ERROR'
+            'MONGODB_CONNECTION_ERROR'
         );
     }
 };
 
-export { run, connectDB, closeDB, pingDB };
+export { runMongo, connectDB, closeDB, pingDB };
