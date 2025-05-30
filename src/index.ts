@@ -1,7 +1,7 @@
 import {config} from "dotenv";
 import {app} from "./app";
 import * as http from "node:http";
-import {closeDB, run} from "./config/mongodb/mongodb.connection";
+import {closeDB, runMongo} from "./config/mongodb/mongodb.connection";
 import {disconnect} from "mongoose";
 import {closeRedis, initRedis} from "./config/redis/redis.client";
 import logger from "./logger";
@@ -13,7 +13,7 @@ let server: http.Server;
 
 export async function main() {
     try{
-        await run()
+        await runMongo()
         await initRedis()
         server = app.listen(PORT, () => {
             logger.info(`Server is running on port ${PORT}`)
