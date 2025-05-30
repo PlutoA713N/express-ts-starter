@@ -25,7 +25,7 @@ A robust, production-ready starter template for building REST APIs with **Expres
 - Request **rate limiting** middleware
 - Request **context** to track request IDs
 - MongoDB connection management with retries and health checks
-- Redis connection management with retries
+- Redis connection management 
 - Swagger API documentation integration
 - Dockerized for easy containerized deployments
 - Jest for unit and integration testing
