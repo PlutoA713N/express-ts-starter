@@ -1,8 +1,10 @@
 import rateLimit from 'express-rate-limit';
 import { Request, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
 import { createApiError } from '../../factory/create.api.error';
 import logger from "../../logger";
+import {ERROR_CODES} from "../../constants/error.constants";
+import HTTP from "http-status-codes";
+import {HTTP_ERROR_DETAILS} from "../../constants/error.details.constants";
 
 export const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -12,10 +14,9 @@ export const apiLimiter = rateLimit({
     handler: (req: Request, res: Response) => {
 
         const error = createApiError({
-            status: 429,
-            code: 'TOO_MANY_REQUESTS',
-            title: 'Too Many Requests',
-            detail: 'Too many requests, please try again later.',
+            status: HTTP.TOO_MANY_REQUESTS,
+            code: ERROR_CODES.TOO_MANY_REQUESTS,
+            detail: HTTP_ERROR_DETAILS.TOO_MANY_REQUESTS,
             instance: req.originalUrl,
         });
 
@@ -32,17 +33,16 @@ export const apiLimiter = rateLimit({
 
 
 export const loginRateLimiter = rateLimit({
-    windowMs: 10 * 60 * 1000, // 10 minutes
+    windowMs: 10 * 60 * 1000,
     limit: 3,
     standardHeaders: true,
     legacyHeaders: false,
     handler: (req: Request, res: Response) => {
 
         const error = createApiError({
-            status: 429,
-            code: 'TOO_MANY_LOGIN_ATTEMPTS',
-            title: 'Too Many Login Attempts',
-            detail: 'You’ve exceeded the number of login attempts. Please wait before retrying.',
+            status: HTTP.TOO_MANY_REQUESTS,
+            code: ERROR_CODES.TOO_MANY_LOGIN_ATTEMPTS,
+            detail: HTTP_ERROR_DETAILS.TOO_MANY_LOGIN_ATTEMPTS,
             instance: req.originalUrl,
         });
 

@@ -1,0 +1,297 @@
+openapi: 3.0.3
+info:
+  title: MULTI LEVEL COMMENT SYSTEM
+  version: 1.0.0
+  description: API documentation with OpenAPI and Express
+
+servers:
+  - url: http://localhost:5000
+    description: Local server
+
+paths:
+  /user/register:
+    post:
+      summary: Register a new user using YAML
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        201:
+          $ref: '#/components/responses/RegisterSuccess'
+        400:
+          $ref: '#/components/responses/ValidationError'
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        409:
+          $ref: '#/components/responses/ConflictError'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /user/login:
+    post:
+      summary: Log in an existing user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          $ref: '#/components/responses/LoginSuccess'
+        400:
+          $ref: '#/components/responses/ValidationError'
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          example: johndoe
+        email:
+          type: string
+          format: email
+          example: johndoe@example.com
+        password:
+          type: string
+          format: password
+          example: StrongP@ssw0rd
+
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username of the user (optional if email is provided)
+          example: johndoe
+        email:
+          type: string
+          format: email
+          description: Email of the user (optional if username is provided)
+          example: johndoe@example.com
+        password:
+          type: string
+          format: password
+          description: User's password
+          example: strongPassword123
+      required:
+        - password
+      anyOf:
+        - required: [ username ]
+        - required: [ email ]
+
+    AuthSuccessResponse:
+      type: object
+      properties:
+        status:
+          type: number
+          example: 201
+        result:
+          type: string
+          example: success
+        code:
+          type: string
+          example: USER_REGISTERED
+        message:
+          type: string
+          example: User registered successfully
+        data:
+          type: object
+          properties:
+            userId:
+              type: string
+              example: "12345"
+            token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        requestId:
+          type: string
+          example: abcde-12345
+        timestamp:
+          type: string
+          format: date-time
+
+    ApiError:
+      type: object
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - instance
+        - code
+        - requestId
+        - timestamp
+      properties:
+        type:
+          type: string
+          example: urn:error:VALIDATION_ERROR
+        title:
+          type: string
+          example: Bad Request
+        status:
+          type: integer
+          example: 400
+        detail:
+          type: string
+          example: One or more validation errors occurred.
+        instance:
+          type: string
+          example: /register
+        code:
+          type: string
+          example: VALIDATION_ERROR
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+        requestId:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+        timestamp:
+          type: string
+          format: date-time
+
+  responses:
+    RegisterSuccess:
+      description: Successful registration
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthSuccessResponse'
+          example:
+            status: 201
+            result: success
+            code: USER_REGISTERED
+            message: User registered successfully
+            data:
+              token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+              userId: "12345"
+            requestId: abcde-12345
+            timestamp: 2025-06-03T12:00:00Z
+
+    LoginSuccess:
+      description: Successful login
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthSuccessResponse'
+          example:
+            status: 200
+            result: success
+            code: USER_LOGGED_IN
+            message: User logged in successfully
+            data:
+              token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+              userId: "12345"
+            requestId: abcde-67890
+            timestamp: 2025-06-03T12:10:00Z
+
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            type: urn:error:VALIDATION_ERROR
+            title: Bad Request
+            status: 400
+            detail: One or more validation errors occurred.
+            instance: /user/register
+            code: VALIDATION_ERROR
+            errors:
+              - field: email
+                message: Invalid email format
+            requestId: abc-400
+            timestamp: 2025-06-03T12:00:00Z
+
+    ForbiddenError:
+      description: Forbidden – you don’t have permission
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            type: urn:error:FORBIDDEN
+            title: Forbidden
+            status: 403
+            detail: You are not authorized to access this resource.
+            instance: /admin/dashboard
+            code: FORBIDDEN
+            requestId: xyz-123
+            timestamp: 2025-06-03T12:01:00Z
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            type: urn:error:NOT_FOUND
+            title: Not Found
+            status: 404
+            detail: The requested resource was not found.
+            instance: /user/profile
+            code: NOT_FOUND
+            requestId: abc-456
+            timestamp: 2025-06-03T12:02:00Z
+
+    ConflictError:
+      description: Conflict – resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            type: urn:error:EMAIL_CONFLICT
+            title: Conflict
+            status: 409
+            detail: Email already exists.
+            instance: /user/register
+            code: EMAIL_ALREADY_EXISTS
+            requestId: def-789
+            timestamp: 2025-06-03T12:03:00Z
+
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+          example:
+            type: urn:error:INTERNAL_SERVER_ERROR
+            title: Internal Server Error
+            status: 500
+            detail: Something went wrong on our end.
+            instance: /user/register
+            code: INTERNAL_SERVER_ERROR
+            requestId: ghi-000
+            timestamp: 2025-06-03T12:04:00Z

@@ -25,7 +25,6 @@ A robust, production-ready starter template for building REST APIs with **Expres
 - Request **rate limiting** middleware
 - Request **context** to track request IDs
 - MongoDB connection management with retries and health checks
-- Redis connection management 
 - Swagger API documentation integration
 - Dockerized for easy containerized deployments
 - Jest for unit and integration testing
@@ -64,7 +63,6 @@ PORT=5000
 LOG_LEVEL=debug
 NODE_ENV=development
 MONGO_URI=YOUR_MONGO_URI
-REDIS_CLIENT_URL=YOUR_REDIS_CLIENT_URL
 DB_RETRY_COUNT=5
 DB_RETRY_DELAY_MS=3000
 ```

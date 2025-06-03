@@ -25,5 +25,5 @@ export const swaggerDefinition = {
 
 export const swaggerOptions = {
     swaggerDefinition,
-    apis: ['./src/routes/*.ts', './src/controllers/*.ts'], // <-- Adjust to your project
+    apis: ['./src/routes/**/*.ts'], // <-- Adjust to your project
 };

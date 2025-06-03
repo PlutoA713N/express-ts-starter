@@ -3,6 +3,8 @@ import { ApiError } from '../../class/api.error.class';
 import logger from "../../logger";
 import {getTimestamp} from "../../utils/time";
 import {getRequestId} from "../../context/requestContext";
+import HTTP from "http-status-codes";
+import {ERROR_CODES} from "../../constants/error.constants";
 
 export const errorHandler = (
     err: Error,
@@ -39,13 +41,13 @@ export const errorHandler = (
     } else {
         logger.error('[Unhandled Error]', err);
 
-        res.status(500).json({
-            type: 'urn:error:INTERNAL_ERROR',
+        res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+            type: `urn:error:${ERROR_CODES.INTERNAL_SERVER_ERROR}`,
             title: 'Internal Server Error',
-            status: 500,
+            status: HTTP.INTERNAL_SERVER_ERROR,
             detail: 'An unexpected error occurred.',
             instance: req.originalUrl,
-            code: 'INTERNAL_ERROR',
+            code: ERROR_CODES.INTERNAL_SERVER_ERROR,
             requestId,
             timestamp: time,
         });

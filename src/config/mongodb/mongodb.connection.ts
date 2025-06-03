@@ -3,12 +3,10 @@ import { connect, connection } from "mongoose";
 import { AppError } from "../../class/app.error.class";
 import logger from "../../logger";
 import {retryAsync} from "../../utils/retryAsync";
+import HTTP from "http-status-codes";
+import { MONGO_ERROR_CODES} from "../../constants/error.constants";
 
 const { mongoUri, retryDelay, retryCount } = mongoDBConfig;
-
-if(!mongoUri){
-    throw new AppError("MongoDB URI not found", 500, "DB_URI_NOT_FOUND");
-}
 
 const connectDB = async (): Promise<void> => {
     try {
@@ -18,8 +16,8 @@ const connectDB = async (): Promise<void> => {
         logger.error('Failed to connect to MongoDB: %o', err);
         throw new AppError(
             `Database connection failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
-            500,
-            'DB_CONNECTION_ERROR'
+            HTTP.INTERNAL_SERVER_ERROR,
+            MONGO_ERROR_CODES.DB_CONNECTION_ERROR
         );
     }
 };
@@ -33,8 +31,8 @@ const pingDB = async (): Promise<void> => {
         logger.error("Failed to ping MongoDB: %o", err);
         throw new AppError(
             `MongoDB ping failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
-            500,
-            'DB_PING_ERROR'
+            HTTP.INTERNAL_SERVER_ERROR,
+            MONGO_ERROR_CODES.DB_PING_ERROR
         )
     }
 }
@@ -47,13 +45,13 @@ const closeDB = async (): Promise<void> => {
         logger.error('Failed to close MongoDB connection: %o', err);
         throw new AppError(
             `Database disconnection failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
-            500,
-            'DB_DISCONNECTION_ERROR'
+            HTTP.INTERNAL_SERVER_ERROR,
+            MONGO_ERROR_CODES.DB_DISCONNECTION_ERROR
         );
     }
 };
 
-const runMongo = async (): Promise<void> => {
+const run = async (): Promise<void> => {
     try {
         await retryAsync(connectDB,
             {
@@ -75,11 +73,11 @@ const runMongo = async (): Promise<void> => {
     } catch (err) {
         logger.error("Failed to ping MongoDB: %o", err);
         throw new AppError(
-            `MongoDB connection failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
-            500,
-            'MONGODB_CONNECTION_ERROR'
+            `MongoDB ping failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+            HTTP.INTERNAL_SERVER_ERROR,
+            MONGO_ERROR_CODES.DB_PING_ERROR
         );
     }
 };
 
-export { runMongo, connectDB, closeDB, pingDB };
+export { run, connectDB, closeDB, pingDB };

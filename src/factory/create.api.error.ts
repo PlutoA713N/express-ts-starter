@@ -1,11 +1,12 @@
 import { ApiError } from '../class/api.error.class';
+import {getReasonPhrase} from 'http-status-codes'
 import {getRequestId} from "../context/requestContext";
 import {getTimestamp} from "../utils/time";
 
 interface CreateApiErrorParams {
     status: number;
     code: string;
-    title: string;
+    title?: string;
     detail?: string;
     instance?: string;
     errors?: any[];
@@ -29,7 +30,7 @@ export function createApiError({
     return new ApiError({
         status,
         code,
-        title,
+        title : title || getReasonPhrase(status),
         detail,
         instance,
         errors,

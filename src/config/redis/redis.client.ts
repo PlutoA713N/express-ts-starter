@@ -1,27 +1,33 @@
-// redisClient.ts
-import {config} from "dotenv";
-import { createClient } from "redis";
+import { createClient, RedisClientType } from 'redis';
+import {getEnv} from "../env";
 import logger from "../../logger";
+import {AppError} from "../../class/app.error.class";
+import HTTP from "http-status-codes";
+import { REDIS_ERROR_CODES} from "../../constants/error.constants";
 
-config()
-
-const url = process.env.REDIS_CLIENT_URL;
-export const client = createClient({ url:  url});
+let redisClient: RedisClientType | null = null;
 
 export async function initRedis() {
-    client.on('error', (err) => {
-        logger.error('Redis error:', err);
-    });
+    const url = getEnv('REDIS_CLIENT_URL');
 
-    client.on('connect', () => {
-        logger.info('Redis connected');
-    });
+    redisClient = createClient({ url });
 
-    await client.connect();
+    redisClient.on('error', (err) => logger.error('Redis error:', err));
+    redisClient.on('connect', () => logger.info('Redis connected'));
+
+    await redisClient.connect();
 }
 
-
 export async function closeRedis() {
-    await client.quit();
-    logger.info('Redis connection closed');
+    if (redisClient) {
+        await redisClient.quit();
+        logger.info('Redis connection closed');
+    }
+}
+
+export function getRedisClient(): RedisClientType {
+    if (!redisClient) {
+        throw new AppError('Redis client is not initialized. Call initRedis() first.', HTTP.INTERNAL_SERVER_ERROR, REDIS_ERROR_CODES.REDIS_NOT_INITIALIZED);
+    }
+    return redisClient;
 }

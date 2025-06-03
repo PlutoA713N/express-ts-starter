@@ -10,6 +10,8 @@ import {requestIdMiddleware} from "./middleware/express_middleware/requestId.mid
 import healthRoutes from "./routes/health.routes";
 import {notFoundMiddleware} from "./middleware/express_middleware/not.found.middleware";
 
+import userRoutes from "./routes/user/index"
+
 export const app = express();
 
 app.use(requestIdMiddleware)
@@ -24,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 setupSwaggerDocs(app)
 
 app.use("/health", healthRoutes)
+app.use("/user", userRoutes)
 
 app.use(notFoundMiddleware)
 app.use(errorHandler)
