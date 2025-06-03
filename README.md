@@ -21,10 +21,12 @@ A robust, production-ready starter template for building REST APIs with **Expres
 ## Features
 
 - **Express + TypeScript** for scalable type-safe APIs
+- JWT token setup along with **/register** and **/login** routes
 - Centralized **error handling** and **logging** with Winston
 - Request **rate limiting** middleware
 - Request **context** to track request IDs
 - MongoDB connection management with retries and health checks
+- Redis setup and utils to store tokens
 - Swagger API documentation integration
 - Dockerized for easy containerized deployments
 - Jest for unit and integration testing
@@ -65,6 +67,8 @@ NODE_ENV=development
 MONGO_URI=YOUR_MONGO_URI
 DB_RETRY_COUNT=5
 DB_RETRY_DELAY_MS=3000
+REDIS_CLIENT_URL=YOUR_REDIS_CLIENT_URL
+JWT_SECRET_KEY=YOUR_JWT_SECRET_KEY
 ```
 
 ## NPM Scripts
