@@ -1,12 +1,8 @@
 import swaggerUi from 'swagger-ui-express';
-import swaggerJSDoc from 'swagger-jsdoc';
-import { swaggerOptions } from './swagger.config';
 import YAML from "yamljs"
 import path from "node:path";
 import { Express } from 'express';
 
-// const swaggerSpec = swaggerJSDoc(swaggerOptions);
-// const swaggerSpec = YAML.parse(JSON.stringify(swaggerOptions));
 const swaggerSpec = YAML.load(path.resolve(__dirname, 'openapi.yaml'))
 
 
