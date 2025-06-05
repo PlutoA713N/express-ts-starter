@@ -6,12 +6,12 @@ import {
     validateRegistrationRules,
     validateResult
 } from "../../middleware/user_middleware/validate.middleware";
+import {loginRateLimiter} from "../../middleware/express_middleware/rate.limiter.middleware";
 
 const router = Router();
 
 router.post("/register", validateRegistrationRules, validateResult, registerUser)
 
-router.post("/login", validateLoginRules, validateResult, handleUserLogin )
-
+router.post("/login", loginRateLimiter, ...validateLoginRules, validateResult, handleUserLogin )
 
 export default router;

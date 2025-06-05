@@ -3,7 +3,7 @@ import {getReasonPhrase} from 'http-status-codes'
 import {getRequestId} from "../context/requestContext";
 import {getTimestamp} from "../utils/time";
 
-interface CreateApiErrorParams {
+export interface ICreateApiErrorParams {
     status: number;
     code: string;
     title?: string;
@@ -24,7 +24,7 @@ export function createApiError({
                                    errors,
                                    type,
                                    isOperational,
-                               }: CreateApiErrorParams): ApiError {
+                               }: ICreateApiErrorParams): ApiError {
     const requestId = getRequestId()
     const time = getTimestamp()
     return new ApiError({

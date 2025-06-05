@@ -1,6 +1,6 @@
 import {Request} from "express";
 import {generateHash} from "../../utils/auth";
-import {UserRegistrationModel} from "../../models/user/user.registration.model";
+import {UserModel} from "../../models/user/user.model";
 import {storeUserToken} from "../../config/redis/redis.utils";
 import {jwtSign} from "../../utils/jwt";
 import {checkFieldExists} from "../../models/mongo_operations/mongo_utils";
@@ -14,20 +14,20 @@ export async function registerUserService(username: string, email: string, passw
     try{
         const hashedPassword = await generateHash(password);
 
-        const userData = new UserRegistrationModel({
+        const userData = new UserModel({
             username,
             email,
             password: hashedPassword,
         });
 
-        const usernameInDB = await checkFieldExists(UserRegistrationModel,"username", username);
+        const usernameInDB = await checkFieldExists(UserModel,"username", username);
 
         if (usernameInDB.isExists) {
             const error = createApiError({status: HTTP.CONFLICT, code: VALIDATION_ERROR_CODES.USERNAME_EXISTS, detail: VALIDATION_ERROR_DETAILS.EMAIL_EXISTS})
             throw error;
         }
 
-        const emailInDB = await checkFieldExists(UserRegistrationModel,"email", email);
+        const emailInDB = await checkFieldExists(UserModel,"email", email);
 
         if (emailInDB.isExists) {
             const error = createApiError({status: HTTP.CONFLICT, code:VALIDATION_ERROR_CODES.EMAIL_EXISTS, detail: VALIDATION_ERROR_DETAILS.USERNAME_EXISTS});
